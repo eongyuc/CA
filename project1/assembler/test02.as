@@ -6,4 +6,4 @@ start   add     1       1       1         reg1 = reg1 + reg1
         noop                              no operation
 done    halt                              end of program
 five    .fill   5                         memory address 'five'에 5저장
-thirty  .fill   30
+thirty  .fill   40

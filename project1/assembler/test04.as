@@ -4,6 +4,7 @@
         lw      0       4       five     reg4 = 5
         add     3       4       4        reg4 = reg3 + reg4
         sw      0       4       store    store에 reg4 저장.
+        halt
 one     .fill   1                        put 1
 two     .fill   2                        put 2
 three   .fill   3                        put 3

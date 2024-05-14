@@ -5,7 +5,8 @@
         noop                              nothing
 loop    add     1       1       1         reg1 = reg1 + reg1
         add     3       2       3         reg3--
-        beq     3       0       loop      if reg3 == 0, goto loop.
+        beq     3       0       end       if reg3 == 0, goto loop.
+        beq     0       0       loop
 end     halt                              end of program
 input1  .fill   5                         
 input2  .fill   4
