@@ -47,6 +47,68 @@ int main(int argc, char *argv[])
     }
 
 		/* TODO: */
+    state.pc = 0;
+    int incount = 0;
+    int opcode, reg0, reg1, reg2, offset;
+    for(int i = 0; i < 8; i++){
+        state.reg[i] = 0;
+    }
+    while(1){ // opcode가 halt가 아니면
+        opcode = (state.mem[state.pc]>>22)&7;
+        reg0 = (state.mem[state.pc]>>19)&7;
+        reg1 = (state.mem[state.pc]>>16)&7;
+
+        //printf("%d,%d,%d\n",opcode ,reg0,reg1);
+        printState(&state);
+        if (opcode == 0){ // add op
+            reg2 = state.mem[state.pc]&7;
+            state.reg[reg2] = state.reg[reg0] + state.reg[reg1];
+        }
+        else if (opcode == 1){ // nor op
+            reg2 = state.mem[state.pc]&7;
+            state.reg[reg2] = ~(state.reg[reg0]|state.reg[reg1]);
+        }
+        else if (opcode == 2){ // lw op
+            offset = 65535&state.mem[state.pc];
+            state.reg[reg1] = state.mem[state.reg[reg0] + offset];
+            /*for(int i = 0; i < 8; i++){
+                printf("[%d]%d\n",i, state.reg[i]);
+            }
+            printf("\n");*/
+        }
+        else if (opcode == 3){ // sw op
+            offset = 65535&state.mem[state.pc];
+            state.mem[state.reg[reg0] + offset] = state.reg[reg1];
+        }
+        else if (opcode == 4){ // beq op
+            offset = 65535&state.mem[state.pc];
+            if(state.reg[reg0] == state.reg[reg1]){
+                state.pc = (state.pc + 1 + offset)&65535;
+                incount++;
+                continue;
+            }
+        }
+        else if (opcode == 5){ // jalr op
+            state.reg[reg1] = state.pc + 1;
+            state.pc = state.reg[reg0];
+            incount++;
+            continue;
+        }
+
+        else if (opcode == 6){ // halt op
+            state.pc++;
+            incount++;
+            printf("machine halted\n");
+            printf("total of %d instructions executed\n", incount);
+            printf("final state of machine:\n\n");
+            break;
+        }
+        
+        state.pc++;
+        incount++;
+        
+    }
+    printState(&state);
     return(0);
 }
 
