@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
         //printf("line%d: %s %s %s %s\n", pc, opcode, arg0, arg1, arg2);
         if((strcmp(opcode,"noop"))&&(strcmp(opcode,"halt"))&&(opcode[0]!='.')) { // O-type instructions아닐 때 arg0 정수 검사.
             if((!isNumber(arg0))||(!isNumber(arg1))){ // reg0, reg1 int검사.
-                printf("here: Non-integer register arguments.\n");
+                printf(" Non-integer register arguments.\n");
                 exit(1);
             }
 
@@ -106,10 +106,16 @@ int main(int argc, char *argv[])
             else if((!strcmp(opcode, "lw"))||(!strcmp(opcode, "sw"))||(!strcmp(opcode, "beq"))){
                 if(!isNumber(arg2)){
                     if(findLabel(arg2, labelMap, labelCount) == -1){
-                        printf("Non-integer register arguments.\n");
+                        printf("Use of undefined labels.\n");
                         exit(1);
                     }
                 }
+            }
+        }
+        else if(opcode[0] == '.'){
+            if(!isNumber(arg0)){
+                printf("Non-integer register arguments.\n");
+                exit(1);
             }
         }
         if(atoi(arg2)>65535){ // 16bit에 안맞는 offset
